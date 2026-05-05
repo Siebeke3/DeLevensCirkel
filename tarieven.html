@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="nl">
 <head>
   <meta charset="UTF-8" />
@@ -8,566 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --rose: #b43d56;
-      --rose-dark: #8f2d42;
-      --rose-light: #faedf0;
-      --sage: #8ea596;
-      --sage-light: #edf4ef;
-      --gold: #c99f5b;
-      --dark: #191716;
-      --muted: #6d6863;
-      --bg: #fffaf6;
-      --white: #ffffff;
-      --border: #eee2dc;
-      --shadow: 0 22px 60px rgba(63, 38, 30, 0.13);
-      --max: 1160px;
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'Inter', sans-serif;
-      color: var(--dark);
-      background: var(--bg);
-      line-height: 1.7;
-      -webkit-font-smoothing: antialiased;
-    }
-
-    nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(255,250,246,0.88);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid var(--border);
-      box-shadow: 0 10px 32px rgba(49,31,25,0.04);
-    }
-
-    .nav-inner {
-      max-width: var(--max);
-      height: 74px;
-      margin: 0 auto;
-      padding: 0 24px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-    }
-
-    .logo img { height: 43px; display: block; }
-
-    .nav-links {
-      display: flex;
-      gap: 26px;
-      list-style: none;
-    }
-
-    .nav-links a {
-      color: var(--muted);
-      font-size: 14px;
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active { color: var(--rose); }
-
-    .nav-cta {
-      display: inline-flex;
-      align-items: center;
-      color: var(--white);
-      background: var(--rose);
-      padding: 9px 18px;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 600;
-      text-decoration: none;
-      box-shadow: 0 10px 24px rgba(180,61,86,0.22);
-    }
-
-    .hero {
-      position: relative;
-      min-height: calc(100vh - 74px);
-      display: grid;
-      align-items: end;
-      overflow: hidden;
-      color: var(--white);
-    }
-
-    .hero::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(90deg, rgba(25,23,22,0.82), rgba(25,23,22,0.45) 54%, rgba(25,23,22,0.08)),
-        linear-gradient(0deg, rgba(25,23,22,0.34), transparent 44%);
-      z-index: 1;
-    }
-
-    .hero img {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center 38%;
-      transform: scale(1.02);
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 2;
-      max-width: var(--max);
-      width: 100%;
-      margin: 0 auto;
-      padding: 96px 24px 78px;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      width: fit-content;
-      margin-bottom: 18px;
-      padding: 8px 12px;
-      border: 1px solid rgba(255,255,255,0.25);
-      border-radius: 8px;
-      background: rgba(255,255,255,0.12);
-      backdrop-filter: blur(14px);
-      font-size: 13px;
-      font-weight: 600;
-    }
-
-    .eyebrow::before {
-      content: '';
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--gold);
-      box-shadow: 0 0 0 5px rgba(201,159,91,0.18);
-    }
-
-    h1 {
-      max-width: 760px;
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(42px, 7vw, 78px);
-      line-height: 0.98;
-      font-weight: 400;
-      text-shadow: 0 4px 28px rgba(0,0,0,0.22);
-    }
-
-    .hero p {
-      max-width: 620px;
-      margin: 24px 0 30px;
-      color: rgba(255,255,255,0.9);
-      font-size: clamp(17px, 1.7vw, 20px);
-    }
-
-    .hero-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 14px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 48px;
-      padding: 13px 22px;
-      border-radius: 8px;
-      font-weight: 700;
-      text-decoration: none;
-      transition: transform 0.2s, background 0.2s;
-    }
-
-    .btn-primary {
-      color: var(--white);
-      background: var(--rose);
-      box-shadow: 0 18px 38px rgba(69,21,32,0.34);
-    }
-
-    .btn-primary:hover { background: var(--rose-dark); transform: translateY(-1px); }
-
-    .btn-light {
-      color: var(--white);
-      border: 1px solid rgba(255,255,255,0.32);
-      background: rgba(255,255,255,0.1);
-      backdrop-filter: blur(14px);
-    }
-
-    .btn-light:hover { background: rgba(255,255,255,0.18); transform: translateY(-1px); }
-
-    .section {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 96px 24px;
-    }
-
-    .section-label {
-      color: var(--rose);
-      font-size: 11px;
-      letter-spacing: 1.4px;
-      text-transform: uppercase;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .section-title {
-      max-width: 720px;
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(30px, 4vw, 46px);
-      line-height: 1.14;
-      font-weight: 400;
-      margin-bottom: 18px;
-    }
-
-    .section-intro {
-      max-width: 700px;
-      color: var(--muted);
-      font-size: 17px;
-      margin-bottom: 44px;
-    }
-
-    .summary-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    .summary-card {
-      min-height: 310px;
-      padding: 34px;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--white);
-      box-shadow: 0 16px 42px rgba(63,38,30,0.08);
-    }
-
-    .summary-icon {
-      width: 62px;
-      height: 62px;
-      margin-bottom: 22px;
-      border-radius: 8px;
-      background: var(--rose-light);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .summary-icon img {
-      width: 42px;
-      height: 42px;
-      object-fit: contain;
-    }
-
-    .summary-card h2,
-    .info-card h2,
-    .cta-card h2 {
-      font-family: 'Playfair Display', serif;
-      font-weight: 400;
-      line-height: 1.2;
-    }
-
-    .summary-card h2 {
-      color: var(--rose);
-      font-size: 30px;
-      margin-bottom: 16px;
-    }
-
-    .summary-card p,
-    .summary-card li,
-    .info-card p,
-    .info-card li { color: var(--muted); }
-
-    .summary-card ul,
-    .info-card ul {
-      display: grid;
-      gap: 12px;
-      margin-top: 18px;
-      padding-left: 18px;
-    }
-
-    .soft-band {
-      background: var(--sage-light);
-      border-top: 1px solid rgba(142,165,150,0.28);
-      border-bottom: 1px solid rgba(142,165,150,0.28);
-    }
-
-    .info-card {
-      padding: 38px;
-      border: 1px solid rgba(142,165,150,0.3);
-      border-radius: 8px;
-      background: #fffdfb;
-    }
-
-    .info-card h2 {
-      color: var(--rose);
-      font-size: 32px;
-      margin-bottom: 18px;
-    }
-
-    .mobile-disclosure {
-      display: none;
-    }
-
-    .table-wrap {
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 0 24px 96px;
-    }
-
-    .table-card {
-      overflow: hidden;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: var(--white);
-      box-shadow: var(--shadow);
-    }
-
-    .table-heading {
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      align-items: end;
-      padding: 28px 30px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .table-heading h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 32px;
-      font-weight: 400;
-      line-height: 1.2;
-    }
-
-    .table-heading p {
-      color: var(--muted);
-      font-size: 13px;
-      max-width: 370px;
-    }
-
-    .table-scroll { overflow-x: auto; }
-
-    .mobile-rates {
-      display: none;
-      gap: 10px;
-      padding: 18px;
-    }
-
-    .rate-card {
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      background: #fffaf6;
-      padding: 15px;
-    }
-
-    .rate-card h3 {
-      font-size: 15px;
-      line-height: 1.35;
-      margin-bottom: 12px;
-      color: var(--dark);
-    }
-
-    .rate-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      padding: 6px 0;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .rate-row strong {
-      color: var(--dark);
-      font-weight: 700;
-      white-space: nowrap;
-    }
-
-    .rate-total strong { color: var(--rose); }
-
-    table {
-      width: 100%;
-      min-width: 860px;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-
-    th,
-    td {
-      padding: 15px 18px;
-      border-bottom: 1px solid var(--border);
-      text-align: right;
-      white-space: nowrap;
-    }
-
-    th:first-child,
-    td:first-child {
-      text-align: left;
-      white-space: normal;
-      min-width: 230px;
-    }
-
-    th {
-      background: #fff7f2;
-      color: var(--dark);
-      font-weight: 700;
-      font-size: 12px;
-      line-height: 1.35;
-    }
-
-    tbody tr:hover { background: #fffaf6; }
-    tbody tr:last-child td { border-bottom: none; }
-    td:last-child { color: var(--rose); font-weight: 700; }
-
-    .cta-section { padding: 0 24px 96px; }
-
-    .cta-card {
-      max-width: var(--max);
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      gap: 28px;
-      padding: 44px;
-      border-radius: 8px;
-      background: var(--dark);
-      color: var(--white);
-      box-shadow: var(--shadow);
-    }
-
-    .cta-card h2 {
-      font-size: clamp(28px, 4vw, 42px);
-      margin-bottom: 10px;
-    }
-
-    .cta-card p {
-      max-width: 620px;
-      color: #c5b9b2;
-    }
-
-    footer {
-      background: #191716;
-      padding: 30px 24px;
-    }
-
-    .footer-inner {
-      max-width: var(--max);
-      margin: 0 auto;
-      display: flex;
-      justify-content: space-between;
-      gap: 18px;
-      color: #8d827c;
-      font-size: 12px;
-    }
-
-    .footer-links { display: flex; gap: 20px; }
-    .footer-links a { color: #8d827c; text-decoration: none; }
-    .footer-links a:hover { color: #e8b8c3; }
-
-    .floating-social {
-      position: fixed;
-      right: 22px;
-      z-index: 110;
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: var(--rose);
-      color: var(--white);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      box-shadow: 0 12px 28px rgba(49,31,25,0.22);
-      transition: transform 0.2s, background 0.2s;
-    }
-
-    .floating-social:hover {
-      background: var(--rose-dark);
-      transform: translateY(-2px);
-    }
-
-    .floating-facebook { bottom: 76px; }
-    .floating-instagram { bottom: 24px; }
-
-    @media (max-width: 820px) {
-      .nav-inner { height: 66px; padding: 0 18px; }
-      .logo img { height: 36px; }
-      .nav-cta { padding: 8px 12px; font-size: 13px; }
-      .nav-links { display: none; }
-      .hero { min-height: calc(100svh - 66px); }
-      .hero-content { padding: 70px 20px 46px; }
-      .hero p { font-size: 16px; line-height: 1.62; margin: 20px 0 24px; }
-      .hero-actions { flex-direction: column; align-items: stretch; }
-      .section { padding: 58px 20px; }
-      .section-intro { margin-bottom: 30px; }
-      .summary-grid,
-      .cta-card { grid-template-columns: 1fr; }
-      .summary-card,
-      .info-card,
-      .cta-card { padding: 26px; }
-      .summary-card { min-height: auto; }
-      .summary-icon { width: 52px; height: 52px; margin-bottom: 16px; }
-      .summary-icon img { width: 34px; height: 34px; }
-      .table-wrap { padding: 0 20px 58px; }
-      .table-heading { flex-direction: column; align-items: start; padding: 24px; }
-      .footer-inner { flex-direction: column; align-items: center; text-align: center; }
-    }
-
-    @media (max-width: 480px) {
-      .nav-cta { padding: 8px 10px; }
-      h1 { font-size: 38px; }
-      .hero { min-height: 620px; }
-      .hero p { font-size: 15px; }
-      .summary-card h2,
-      .info-card h2,
-      .table-heading h2 { font-size: 25px; }
-      .summary-card ul,
-      .info-card ul { gap: 8px; }
-      .mobile-disclosure {
-        display: block;
-        border: 1px solid rgba(142,165,150,0.3);
-        border-radius: 8px;
-        background: #fffdfb;
-        overflow: hidden;
-      }
-      .mobile-disclosure summary {
-        cursor: pointer;
-        padding: 18px;
-        color: var(--rose);
-        font-family: 'Playfair Display', serif;
-        font-size: 24px;
-        line-height: 1.2;
-        list-style: none;
-      }
-      .mobile-disclosure summary::-webkit-details-marker { display: none; }
-      .mobile-disclosure summary::after {
-        content: '+';
-        float: right;
-        font-family: 'Inter', sans-serif;
-        font-size: 24px;
-        line-height: 1;
-      }
-      .mobile-disclosure[open] summary::after { content: '-'; }
-      .mobile-disclosure-content {
-        padding: 0 18px 18px;
-        color: var(--muted);
-      }
-      .soft-band .info-card { display: none; }
-      .table-scroll { display: none; }
-      .mobile-rates { display: grid; }
-      .table-heading { padding: 20px 18px 12px; }
-      .footer-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
-      .floating-social { right: 14px; width: 38px; height: 38px; }
-      .floating-facebook { bottom: 66px; }
-      .floating-instagram { bottom: 18px; }
-    }
-  </style>
+  <link rel="stylesheet" href="./css/tarieven/tarieven.css" />
 </head>
 <body>
   <nav>
@@ -624,7 +65,7 @@
           <h2>Na de geboorte</h2>
           <p>Tot en met de vijfde dag na de bevalling kunnen we dagelijks langskomen.</p>
           <ul>
-            <li>Daarna heb je nog recht op 6 à 9 huisbezoeken.</li>
+            <li>Daarna heb je nog recht op 6 Ã  9 huisbezoeken.</li>
             <li>Extra bezoeken kunnen op doktersvoorschrift als dat medisch nodig is.</li>
           </ul>
         </article>
@@ -637,7 +78,7 @@
         <h2 class="section-title">Hoe werkt de betaling precies?</h2>
         <div class="info-card">
           <h2>Wij werken gedeconventioneerd.</h2>
-          <p>De mutualiteit betaalt 75% terug van het officiële RIZIV-tarief. Dat deel rekenen we rechtstreeks af via de derdebetalersregeling.</p>
+          <p>De mutualiteit betaalt 75% terug van het officiÃ«le RIZIV-tarief. Dat deel rekenen we rechtstreeks af via de derdebetalersregeling.</p>
           <ul>
             <li>Het remgeld en eventuele ereloonsupplementen betaal je tijdens het huisbezoek via bancontact pay of je bankapp.</li>
             <li>Daarna ontvang je een factuur die je kan indienen bij je hospitalisatieverzekering.</li>
@@ -648,7 +89,7 @@
         <details class="mobile-disclosure">
           <summary>Wij werken gedeconventioneerd.</summary>
           <div class="mobile-disclosure-content">
-            <p>De mutualiteit betaalt 75% terug van het officiële RIZIV-tarief. Dat deel rekenen we rechtstreeks af via de derdebetalersregeling.</p>
+            <p>De mutualiteit betaalt 75% terug van het officiÃ«le RIZIV-tarief. Dat deel rekenen we rechtstreeks af via de derdebetalersregeling.</p>
             <ul>
               <li>Remgeld en supplement betaal je tijdens het huisbezoek.</li>
               <li>Je ontvangt een factuur voor je hospitalisatieverzekering.</li>
@@ -673,67 +114,67 @@
                 <th>Mutualiteit via 3de betalersregeling</th>
                 <th>Remgeld</th>
                 <th>Supplement</th>
-                <th>Totaal ten koste van patiënt</th>
+                <th>Totaal ten koste van patiÃ«nt</th>
               </tr>
             </thead>
             <tbody>
-              <tr><td>Intake tijdens de zwangerschap</td><td>€ 42,43</td><td>€ 14,14</td><td>€ 0,86</td><td>€ 15</td></tr>
-              <tr><td>Vervolg prenataal consult + GVO</td><td>€ 42,43</td><td>€ 14,14</td><td>€ 35,86</td><td>€ 50</td></tr>
-              <tr><td>Dag 0 weekdag</td><td>€ 31,78</td><td>€ 10,59</td><td>€ 35,41</td><td>€ 46</td></tr>
-              <tr><td>Dag 0 weekend</td><td>€ 47,66</td><td>€ 15,89</td><td>€ 56,11</td><td>€ 72</td></tr>
-              <tr><td>Dag 1-3 weekdag</td><td>€ 52,96</td><td>€ 17,65</td><td>€ 37,35</td><td>€ 55</td></tr>
-              <tr><td>Dag 1-3 weekend</td><td>€ 79,43</td><td>€ 26,48</td><td>€ 58,52</td><td>€ 85</td></tr>
-              <tr><td>Dag 4-5 weekdag</td><td>€ 42,37</td><td>€ 14,12</td><td>€ 37,88</td><td>€ 52</td></tr>
-              <tr><td>Dag 4-5 weekend</td><td>€ 63,55</td><td>€ 21,18</td><td>€ 58,82</td><td>€ 80</td></tr>
-              <tr><td>Dag 6+ weekdag</td><td>€ 34,32</td><td>€ 11,44</td><td>€ 36,56</td><td>€ 48</td></tr>
-              <tr><td>Dag 6+ weekend</td><td>€ 51,48</td><td>€ 17,16</td><td>€ 57,84</td><td>€ 75</td></tr>
-              <tr><td>1ste borstvoedingsconsult weekdag</td><td>€ 51,48</td><td>€ 17,16</td><td>€ 34,84</td><td>€ 52</td></tr>
-              <tr><td>1ste borstvoedingsconsult weekend</td><td>€ 77,22</td><td>€ 25,74</td><td>€ 54,26</td><td>€ 80</td></tr>
-              <tr><td>Vervolg borstvoedingsconsult</td><td>€ 43,47</td><td>€ 14,49</td><td>€ 35,51</td><td>€ 50</td></tr>
+              <tr><td>Intake tijdens de zwangerschap</td><td>â‚¬ 42,43</td><td>â‚¬ 14,14</td><td>â‚¬ 0,86</td><td>â‚¬ 15</td></tr>
+              <tr><td>Vervolg prenataal consult + GVO</td><td>â‚¬ 42,43</td><td>â‚¬ 14,14</td><td>â‚¬ 35,86</td><td>â‚¬ 50</td></tr>
+              <tr><td>Dag 0 weekdag</td><td>â‚¬ 31,78</td><td>â‚¬ 10,59</td><td>â‚¬ 35,41</td><td>â‚¬ 46</td></tr>
+              <tr><td>Dag 0 weekend</td><td>â‚¬ 47,66</td><td>â‚¬ 15,89</td><td>â‚¬ 56,11</td><td>â‚¬ 72</td></tr>
+              <tr><td>Dag 1-3 weekdag</td><td>â‚¬ 52,96</td><td>â‚¬ 17,65</td><td>â‚¬ 37,35</td><td>â‚¬ 55</td></tr>
+              <tr><td>Dag 1-3 weekend</td><td>â‚¬ 79,43</td><td>â‚¬ 26,48</td><td>â‚¬ 58,52</td><td>â‚¬ 85</td></tr>
+              <tr><td>Dag 4-5 weekdag</td><td>â‚¬ 42,37</td><td>â‚¬ 14,12</td><td>â‚¬ 37,88</td><td>â‚¬ 52</td></tr>
+              <tr><td>Dag 4-5 weekend</td><td>â‚¬ 63,55</td><td>â‚¬ 21,18</td><td>â‚¬ 58,82</td><td>â‚¬ 80</td></tr>
+              <tr><td>Dag 6+ weekdag</td><td>â‚¬ 34,32</td><td>â‚¬ 11,44</td><td>â‚¬ 36,56</td><td>â‚¬ 48</td></tr>
+              <tr><td>Dag 6+ weekend</td><td>â‚¬ 51,48</td><td>â‚¬ 17,16</td><td>â‚¬ 57,84</td><td>â‚¬ 75</td></tr>
+              <tr><td>1ste borstvoedingsconsult weekdag</td><td>â‚¬ 51,48</td><td>â‚¬ 17,16</td><td>â‚¬ 34,84</td><td>â‚¬ 52</td></tr>
+              <tr><td>1ste borstvoedingsconsult weekend</td><td>â‚¬ 77,22</td><td>â‚¬ 25,74</td><td>â‚¬ 54,26</td><td>â‚¬ 80</td></tr>
+              <tr><td>Vervolg borstvoedingsconsult</td><td>â‚¬ 43,47</td><td>â‚¬ 14,49</td><td>â‚¬ 35,51</td><td>â‚¬ 50</td></tr>
             </tbody>
           </table>
         </div>
         <div class="mobile-rates">
           <article class="rate-card">
             <h3>Intake tijdens de zwangerschap</h3>
-            <div class="rate-row"><span>Mutualiteit</span><strong>€ 42,43</strong></div>
-            <div class="rate-row"><span>Remgeld</span><strong>€ 14,14</strong></div>
-            <div class="rate-row"><span>Supplement</span><strong>€ 0,86</strong></div>
-            <div class="rate-row rate-total"><span>Totaal patiënt</span><strong>€ 15</strong></div>
+            <div class="rate-row"><span>Mutualiteit</span><strong>â‚¬ 42,43</strong></div>
+            <div class="rate-row"><span>Remgeld</span><strong>â‚¬ 14,14</strong></div>
+            <div class="rate-row"><span>Supplement</span><strong>â‚¬ 0,86</strong></div>
+            <div class="rate-row rate-total"><span>Totaal patiÃ«nt</span><strong>â‚¬ 15</strong></div>
           </article>
           <article class="rate-card">
             <h3>Vervolg prenataal consult + GVO</h3>
-            <div class="rate-row"><span>Mutualiteit</span><strong>€ 42,43</strong></div>
-            <div class="rate-row"><span>Remgeld</span><strong>€ 14,14</strong></div>
-            <div class="rate-row"><span>Supplement</span><strong>€ 35,86</strong></div>
-            <div class="rate-row rate-total"><span>Totaal patiënt</span><strong>€ 50</strong></div>
+            <div class="rate-row"><span>Mutualiteit</span><strong>â‚¬ 42,43</strong></div>
+            <div class="rate-row"><span>Remgeld</span><strong>â‚¬ 14,14</strong></div>
+            <div class="rate-row"><span>Supplement</span><strong>â‚¬ 35,86</strong></div>
+            <div class="rate-row rate-total"><span>Totaal patiÃ«nt</span><strong>â‚¬ 50</strong></div>
           </article>
           <article class="rate-card">
             <h3>Dag 1-3 weekdag</h3>
-            <div class="rate-row"><span>Mutualiteit</span><strong>€ 52,96</strong></div>
-            <div class="rate-row"><span>Remgeld</span><strong>€ 17,65</strong></div>
-            <div class="rate-row"><span>Supplement</span><strong>€ 37,35</strong></div>
-            <div class="rate-row rate-total"><span>Totaal patiënt</span><strong>€ 55</strong></div>
+            <div class="rate-row"><span>Mutualiteit</span><strong>â‚¬ 52,96</strong></div>
+            <div class="rate-row"><span>Remgeld</span><strong>â‚¬ 17,65</strong></div>
+            <div class="rate-row"><span>Supplement</span><strong>â‚¬ 37,35</strong></div>
+            <div class="rate-row rate-total"><span>Totaal patiÃ«nt</span><strong>â‚¬ 55</strong></div>
           </article>
           <article class="rate-card">
             <h3>Dag 1-3 weekend</h3>
-            <div class="rate-row"><span>Mutualiteit</span><strong>€ 79,43</strong></div>
-            <div class="rate-row"><span>Remgeld</span><strong>€ 26,48</strong></div>
-            <div class="rate-row"><span>Supplement</span><strong>€ 58,52</strong></div>
-            <div class="rate-row rate-total"><span>Totaal patiënt</span><strong>€ 85</strong></div>
+            <div class="rate-row"><span>Mutualiteit</span><strong>â‚¬ 79,43</strong></div>
+            <div class="rate-row"><span>Remgeld</span><strong>â‚¬ 26,48</strong></div>
+            <div class="rate-row"><span>Supplement</span><strong>â‚¬ 58,52</strong></div>
+            <div class="rate-row rate-total"><span>Totaal patiÃ«nt</span><strong>â‚¬ 85</strong></div>
           </article>
           <article class="rate-card">
             <h3>Dag 6+ weekdag</h3>
-            <div class="rate-row"><span>Mutualiteit</span><strong>€ 34,32</strong></div>
-            <div class="rate-row"><span>Remgeld</span><strong>€ 11,44</strong></div>
-            <div class="rate-row"><span>Supplement</span><strong>€ 36,56</strong></div>
-            <div class="rate-row rate-total"><span>Totaal patiënt</span><strong>€ 48</strong></div>
+            <div class="rate-row"><span>Mutualiteit</span><strong>â‚¬ 34,32</strong></div>
+            <div class="rate-row"><span>Remgeld</span><strong>â‚¬ 11,44</strong></div>
+            <div class="rate-row"><span>Supplement</span><strong>â‚¬ 36,56</strong></div>
+            <div class="rate-row rate-total"><span>Totaal patiÃ«nt</span><strong>â‚¬ 48</strong></div>
           </article>
           <article class="rate-card">
             <h3>Borstvoedingsconsult vanaf</h3>
-            <div class="rate-row"><span>Weekdag</span><strong>€ 52</strong></div>
-            <div class="rate-row"><span>Weekend</span><strong>€ 80</strong></div>
-            <div class="rate-row rate-total"><span>Vervolgconsult</span><strong>€ 50</strong></div>
+            <div class="rate-row"><span>Weekdag</span><strong>â‚¬ 52</strong></div>
+            <div class="rate-row"><span>Weekend</span><strong>â‚¬ 80</strong></div>
+            <div class="rate-row rate-total"><span>Vervolgconsult</span><strong>â‚¬ 50</strong></div>
           </article>
         </div>
       </div>
