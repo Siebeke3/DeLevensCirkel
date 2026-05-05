@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>De Levenscirkel - Vroedvrouwen aan huis · Regio Kempen</title>
+  <meta name="description" content="Vertrouw tijdens je zwangerschap en na de geboorte op de zelfstandige vroedvrouwen van De Levenscirkel. Actief in de hele Antwerpse Kempen." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose:       #b43d56;
+      --rose-dark:  #8f2d42;
+      --rose-light: #faedf0;
+      --rose-mid:   #e8b8c3;
+      --sage:       #8ea596;
+      --sage-light: #edf4ef;
+      --gold:       #c99f5b;
+      --dark:       #191716;
+      --muted:      #6d6863;
+      --bg:         #fffaf6;
+      --white:      #ffffff;
+      --border:     #eee2dc;
+      --shadow:     0 20px 55px rgba(63, 38, 30, 0.12);
+      --max:        1160px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--dark);
+      background:
+        linear-gradient(180deg, rgba(255,250,246,0.82), rgba(255,250,246,1) 760px),
+        radial-gradient(circle at top left, rgba(232,184,195,0.28), transparent 32rem),
+        var(--bg);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,250,246,0.86);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 10px 32px rgba(49, 31, 25, 0.04);
+    }
+
+    .nav-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 24px;
+      height: 74px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .logo img {
+      height: 43px;
+      width: auto;
+      display: block;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 14px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+      position: relative;
+    }
+
+    .nav-links a:hover { color: var(--rose); }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -8px;
+      height: 2px;
+      border-radius: 99px;
+      background: var(--rose);
+      opacity: 0;
+      transform: scaleX(0.5);
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .nav-links a:hover::after { opacity: 1; transform: scaleX(1); }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--white);
+      background: var(--rose);
+      padding: 9px 18px;
+      border-radius: 8px;
+      text-decoration: none;
+      white-space: nowrap;
+      box-shadow: 0 10px 24px rgba(180,61,86,0.22);
+      transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+      flex-shrink: 0;
+    }
+
+    .nav-cta:hover { opacity: 0.92; transform: translateY(-1px); box-shadow: 0 14px 28px rgba(180,61,86,0.25); }
+
+    /* ── HERO ── */
+    .hero-wrap {
+      position: relative;
+      min-height: calc(100vh - 74px);
+      max-height: 760px;
+      overflow: hidden;
+      display: grid;
+      align-items: center;
+    }
+
+    .hero-text-col {
+      position: relative;
+      z-index: 3;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      max-width: var(--max);
+      width: 100%;
+      margin: 0 auto;
+      padding: 86px 24px 78px;
+    }
+
+    .hero-text-col h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(44px, 6vw, 78px);
+      font-weight: 400;
+      line-height: 0.98;
+      color: var(--white);
+      margin-bottom: 28px;
+      max-width: 620px;
+      text-shadow: 0 4px 28px rgba(0,0,0,0.22);
+    }
+
+    .hero-text-col h1 em {
+      font-style: italic;
+      color: #ffdbe3;
+      display: block;
+    }
+
+    .hero-text-col p {
+      font-size: clamp(17px, 1.6vw, 20px);
+      color: rgba(255,255,255,0.9);
+      line-height: 1.75;
+      max-width: 520px;
+      margin-bottom: 28px;
+      text-shadow: 0 3px 18px rgba(0,0,0,0.28);
+    }
+
+    .hero-kicker {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      gap: 9px;
+      margin-bottom: 18px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 8px;
+      color: rgba(255,255,255,0.92);
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(14px);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .hero-kicker::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 0 5px rgba(201,159,91,0.18);
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .hero-tel {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      width: fit-content;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--white);
+      background: var(--rose);
+      text-decoration: none;
+      letter-spacing: -0.3px;
+      padding: 14px 22px;
+      border-radius: 8px;
+      box-shadow: 0 18px 38px rgba(69,21,32,0.34);
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .hero-tel svg { color: currentColor; flex-shrink: 0; }
+    .hero-tel:hover { background: var(--rose-dark); transform: translateY(-1px); }
+
+    .hero-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.32);
+      border-radius: 8px;
+      padding: 13px 20px;
+      text-decoration: none;
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(14px);
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .hero-secondary:hover { background: rgba(255,255,255,0.18); transform: translateY(-1px); }
+
+    .hero-scroll {
+      font-size: 13px;
+      color: rgba(255,255,255,0.82);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+
+    .hero-scroll:hover { color: var(--white); }
+
+    .hero-photo-col {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .hero-photo-col::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(25,23,22,0.78) 0%, rgba(25,23,22,0.50) 44%, rgba(25,23,22,0.12) 100%),
+        linear-gradient(0deg, rgba(25,23,22,0.28), rgba(25,23,22,0.02) 42%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-photo-col img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 38%;
+      display: block;
+      transform: scale(1.02);
+    }
+
+    /* ── TRUST STRIP ── */
+    .trust-strip {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: rgba(255,255,255,0.92);
+      box-shadow: 0 14px 44px rgba(63, 38, 30, 0.06);
+    }
+
+    .trust-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      font-size: 14px;
+      color: var(--dark);
+      flex-wrap: wrap;
+    }
+
+    .trust-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--rose-mid);
+      flex-shrink: 0;
+    }
+
+    /* ── SHARED BUTTONS (used in other sections) ── */
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--white);
+      background: var(--rose);
+      padding: 13px 26px;
+      border-radius: 8px;
+      text-decoration: none;
+      box-shadow: 0 12px 26px rgba(180,61,86,0.2);
+      transition: opacity 0.2s, transform 0.15s;
+    }
+
+    .btn-primary:hover { opacity: 0.87; transform: translateY(-1px); }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 15px;
+      color: var(--dark);
+      background: transparent;
+      border: 1px solid var(--border);
+      padding: 13px 26px;
+      border-radius: 8px;
+      text-decoration: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .btn-ghost:hover { border-color: var(--rose-mid); background: var(--rose-light); }
+
+    /* ── SECTION COMMON ── */
+    .section {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 96px 24px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--rose);
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(26px, 3.2vw, 38px);
+      font-weight: 400;
+      line-height: 1.25;
+      color: var(--dark);
+      max-width: 520px;
+      margin-bottom: 14px;
+    }
+
+    .section-intro {
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 540px;
+      margin-bottom: 52px;
+    }
+
+    /* ── DIENSTEN ── */
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+    }
+
+    .service-card {
+      background: #FFFAF6;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 36px 32px;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+    }
+
+    .service-card::before {
+      content: '';
+      position: absolute;
+      inset: 0 0 auto;
+      height: 4px;
+      background: linear-gradient(90deg, var(--rose), var(--sage), var(--gold));
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+
+    .service-card:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-3px);
+      border-color: rgba(180,61,86,0.24);
+    }
+
+    .service-card:hover::before { opacity: 1; }
+
+    .service-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, var(--rose-light), var(--sage-light));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .service-card h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 400;
+      margin-bottom: 10px;
+    }
+
+    .service-card p { font-size: 14px; color: var(--muted); line-height: 1.75; }
+
+    .card-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      margin-top: 18px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--rose);
+      text-decoration: none;
+    }
+
+    .card-link:hover { text-decoration: underline; }
+
+    /* ── TEAM ── */
+    .team-bg {
+      background: var(--white);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+    }
+
+    .team-toggle {
+      display: none;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      margin-top: 22px;
+      border: 1px solid var(--rose-mid);
+      border-radius: 8px;
+      background: var(--white);
+      color: var(--rose);
+      padding: 13px 18px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .team-card {
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      transition: box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+    }
+
+    .team-card:hover {
+      box-shadow: var(--shadow);
+      transform: translateY(-2px);
+      border-color: rgba(180,61,86,0.22);
+    }
+
+    .team-photo {
+      width: 100%;
+      aspect-ratio: 3/4;
+      overflow: hidden;
+      background: var(--rose-light);
+    }
+
+    .team-photo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: top center;
+      display: block;
+    }
+
+    .team-info { padding: 16px 18px 20px; }
+
+    .team-info h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 16px;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .team-city {
+      font-size: 12px;
+      color: var(--rose);
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+
+    .team-cities {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 10px;
+    }
+
+    .team-phone {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+    }
+
+    .team-phone:hover { color: var(--rose); }
+
+    .team-since {
+      display: inline-block;
+      font-size: 11px;
+      color: var(--muted);
+      background: var(--rose-light);
+      color: var(--rose);
+      padding: 2px 8px;
+      border-radius: 8px;
+      margin-top: 8px;
+    }
+
+    /* ── ZORGREGIO ── */
+    .region-wrap {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: center;
+    }
+
+    .region-map {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      aspect-ratio: 4/3;
+      box-shadow: var(--shadow);
+      position: relative;
+      background: var(--rose-light);
+    }
+
+    #midwife-map {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .leaflet-container {
+      font-family: 'Inter', sans-serif;
+      background: var(--rose-light);
+    }
+
+    .midwife-marker {
+      position: relative;
+      width: 34px;
+      height: 34px;
+      border: 3px solid var(--white);
+      border-radius: 50% 50% 50% 0;
+      background: var(--rose);
+      box-shadow: 0 9px 22px rgba(52, 28, 24, 0.25);
+      cursor: pointer;
+      transform: rotate(-45deg);
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .midwife-marker::after {
+      content: '';
+      position: absolute;
+      inset: 8px;
+      border-radius: 50%;
+      background: var(--white);
+    }
+
+    .midwife-marker:hover,
+    .midwife-marker.is-active {
+      background: var(--rose-dark);
+      transform: rotate(-45deg) scale(1.08);
+    }
+
+    .leaflet-control-attribution {
+      font-size: 10px;
+    }
+
+    .map-card {
+      position: absolute;
+      left: 24px;
+      top: 24px;
+      z-index: 900;
+      width: min(310px, calc(100% - 48px));
+      padding: 26px 26px 20px;
+      border-radius: 8px;
+      background: var(--white);
+      box-shadow: 0 18px 45px rgba(52, 28, 24, 0.22);
+    }
+
+    .map-card-close {
+      position: absolute;
+      right: 16px;
+      top: 14px;
+      width: 28px;
+      height: 28px;
+      border: none;
+      background: transparent;
+      color: #6b625d;
+      cursor: pointer;
+      font-size: 28px;
+      line-height: 1;
+    }
+
+    .map-card h3 {
+      font-family: 'Inter', sans-serif;
+      font-size: 28px;
+      line-height: 1.1;
+      color: var(--rose);
+      margin: 8px 34px 20px 0;
+    }
+
+    .map-card p {
+      color: #5b5551;
+      font-size: 16px;
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+
+    .map-card a {
+      color: var(--rose);
+    }
+
+    .map-card-cta {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      min-width: 212px;
+      margin-top: 2px;
+      padding: 16px 20px;
+      border-radius: 0;
+      background: var(--rose);
+      color: var(--white) !important;
+      font-weight: 700;
+      text-decoration: none;
+      text-transform: uppercase;
+    }
+
+    .map-card-cta:hover { background: var(--rose-dark); }
+
+    /* ── TARIEVEN ── */
+    .tarieven-bg {
+      background:
+        linear-gradient(115deg, rgba(250,237,240,0.98) 0%, rgba(237,244,239,0.94) 100%);
+      border-top: 1px solid var(--rose-mid);
+    }
+
+    /* ── CONTACT ── */
+    .contact-bg {
+      background: #191716;
+      border-top: 1px solid rgba(25,23,22,0.08);
+    }
+
+    .contact-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 82px 24px 74px;
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(360px, 1.1fr);
+      gap: 44px;
+      align-items: stretch;
+    }
+
+    .contact-panel {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 34px;
+      padding: 34px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.045);
+    }
+
+    .contact-inner .section-label { color: #e8b8c3; }
+    .contact-inner .section-title { color: var(--white); max-width: 420px; margin-bottom: 16px; }
+    .contact-inner .section-intro { color: #c5b9b2; max-width: 430px; margin-bottom: 0; }
+
+    .contact-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
+
+    .contact-list li {
+      display: flex;
+      align-items: center;
+      gap: 13px;
+      font-size: 15px;
+      color: #eee4df;
+      padding: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.035);
+    }
+
+    .c-icon {
+      width: 38px;
+      height: 38px;
+      min-width: 38px;
+      border-radius: 8px;
+      background: rgba(180,61,86,0.24);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .contact-list a { color: inherit; text-decoration: none; }
+    .contact-list a:hover { color: #ffdbe3; }
+
+    .contact-note {
+      color: #9f948f;
+      font-size: 13px;
+      line-height: 1.7;
+      max-width: 360px;
+    }
+
+    .contact-form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      padding: 30px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: #FFFAF6;
+      box-shadow: 0 26px 70px rgba(0,0,0,0.28);
+    }
+
+    .form-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 18px;
+      padding-bottom: 10px;
+      margin-bottom: 2px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-heading h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 25px;
+      font-weight: 400;
+      line-height: 1.2;
+      color: var(--dark);
+    }
+
+    .form-heading span {
+      font-size: 12px;
+      color: var(--rose);
+      background: var(--rose-light);
+      padding: 5px 9px;
+      border-radius: 8px;
+      white-space: nowrap;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .form-group { display: flex; flex-direction: column; gap: 7px; }
+
+    .form-group label {
+      font-size: 12px;
+      color: var(--dark);
+      font-weight: 500;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 14px;
+      color: var(--dark);
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder { color: #a09a94; }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      background: #FFFFFF;
+      border-color: var(--rose);
+      box-shadow: 0 0 0 3px rgba(180,61,86,0.12);
+    }
+
+    .form-group textarea { resize: vertical; min-height: 110px; }
+    .form-group select option { background: var(--white); color: var(--dark); }
+
+    .btn-submit {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--white);
+      background: var(--rose);
+      border: none;
+      padding: 13px 24px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      align-self: stretch;
+      box-shadow: 0 14px 30px rgba(180,61,86,0.24);
+      transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
+
+    .btn-submit:hover {
+      opacity: 0.94;
+      transform: translateY(-1px);
+      box-shadow: 0 18px 36px rgba(180,61,86,0.3);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #191716;
+      padding: 0 24px 30px;
+    }
+
+    .footer-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .footer-logo img { height: 32px; width: auto; filter: brightness(0) invert(1); }
+
+    .footer-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #8d827c;
+    }
+
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { color: #8d827c; text-decoration: none; }
+    .footer-links a:hover { color: #e8b8c3; }
+
+    .floating-social {
+      position: fixed;
+      right: 22px;
+      z-index: 110;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--rose);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 12px 28px rgba(49, 31, 25, 0.22);
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .floating-social:hover {
+      background: var(--rose-dark);
+      transform: translateY(-2px);
+    }
+
+    .floating-facebook { bottom: 76px; }
+    .floating-instagram { bottom: 24px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .team-grid { grid-template-columns: repeat(3, 1fr); }
+      .stats-inner { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    @media (max-width: 768px) {
+      .nav-inner { height: 66px; padding: 0 18px; }
+      .logo img { height: 36px; }
+      .nav-cta { padding: 8px 12px; font-size: 13px; }
+      .hero-wrap { min-height: calc(100svh - 66px); max-height: none; }
+      .hero-text-col { padding: 62px 20px 42px; justify-content: end; }
+      .hero-text-col h1 { font-size: clamp(36px, 11vw, 50px); margin-bottom: 18px; }
+      .hero-text-col p { max-width: 100%; margin-bottom: 22px; font-size: 16px; line-height: 1.62; }
+      .hero-kicker { font-size: 12px; padding: 7px 10px; }
+      .hero-actions { align-items: stretch; flex-direction: column; }
+      .hero-tel,
+      .hero-secondary { justify-content: center; width: 100%; min-height: 46px; }
+      .hero-scroll { display: none; }
+      .hero-photo-col::after {
+        background:
+          linear-gradient(90deg, rgba(25,23,22,0.64), rgba(25,23,22,0.28)),
+          linear-gradient(0deg, rgba(25,23,22,0.62), rgba(25,23,22,0.06) 58%);
+      }
+      .hero-photo-col img { object-position: 62% center; }
+      .trust-inner { justify-content: flex-start; gap: 12px; padding: 14px 20px; font-size: 12px; }
+      .trust-dot { display: none; }
+      .section { padding: 64px 20px; }
+      .section-intro { margin-bottom: 34px; }
+      .services-grid { grid-template-columns: 1fr; }
+      .service-card { padding: 26px 22px; }
+      .team-grid { grid-template-columns: repeat(2, 1fr); }
+      .team-grid:not(.is-expanded) .team-card:nth-child(n+5) { display: none; }
+      .team-toggle { display: flex; }
+      .team-info { padding: 14px; }
+      .team-info h3 { font-size: 15px; }
+      .team-cities { font-size: 11px; }
+      .region-wrap { grid-template-columns: 1fr; }
+      .region-map { aspect-ratio: auto; height: 520px; }
+      .map-card {
+        left: 14px;
+        top: 14px;
+        width: calc(100% - 28px);
+        max-height: 46%;
+        overflow: auto;
+        padding: 20px 20px 18px;
+      }
+      .map-card h3 { font-size: 24px; }
+      .map-card p { font-size: 14px; }
+      .map-card-cta { width: 100%; }
+      .contact-inner { grid-template-columns: 1fr; gap: 44px; padding: 64px 20px; }
+      .contact-panel { padding: 24px; }
+      .contact-form { padding: 18px; }
+      .form-heading { flex-direction: column; gap: 8px; }
+      .form-row { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .footer-bottom { flex-direction: column; gap: 10px; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .nav-inner { gap: 12px; }
+      .nav-cta svg { display: none; }
+      .hero-wrap { min-height: 620px; }
+      .team-grid { grid-template-columns: 1fr; }
+      .team-grid:not(.is-expanded) .team-card:nth-child(n+4) { display: none; }
+      .stats-inner { grid-template-columns: 1fr 1fr; }
+      .form-heading h3 { font-size: 22px; }
+      .footer-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
+      .floating-social { right: 14px; width: 38px; height: 38px; }
+      .floating-facebook { bottom: 66px; }
+      .floating-instagram { bottom: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a class="logo" href="#">
+        <img src="https://delevenscirkel.be/themes/shop/default/build/assets/logo-0cc61c40.png" alt="De Levenscirkel" />
+      </a>
+      <ul class="nav-links">
+        <li><a href="#diensten">Diensten</a></li>
+        <li><a href="#team">Team</a></li>
+        <li><a href="#zorgregio">Zorgregio</a></li>
+        <li><a href="./tarieven.html">Tarieven</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a class="nav-cta" href="tel:+32468341796">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.19 11a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 7.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+        0468 34 17 96
+      </a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero-wrap">
+    <div class="hero-text-col">
+      <h1>Jouw vroedvrouw.<em>Bij jou thuis.</em></h1>
+      <p>Persoonlijke begeleiding tijdens de zwangerschap en na de geboorte &mdash; in de regio Kempen.</p>
+      <div class="hero-actions">
+        <a class="hero-tel" href="tel:+32468341796">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.19 11a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 7.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          0468 34 17 96
+        </a>
+        <a class="hero-secondary" href="#contact">Stel je vraag &rarr;</a>
+      </div>
+      <a class="hero-scroll" href="#team">Maak kennis met ons team &darr;</a>
+    </div>
+    <div class="hero-photo-col">
+      <!-- Vervang door eigen foto: een sfeervolle scène zonder gezicht, bv. handen, buik, thuisbezoek -->
+      <img
+        src="https://delevenscirkel.be/storage/page/1/9575284954-xxl.webp"
+        alt="Vroedvrouw aan huis"
+      />
+    </div>
+  </div>
+
+  <div class="trust-strip">
+    <div class="trust-inner">
+      <span>Erkend door de mutualiteiten</span>
+      <div class="trust-dot"></div>
+      <span>Actief in de Kempen sinds 2009</span>
+      <div class="trust-dot"></div>
+      <span>7 vroedvrouwen aan huis</span>
+    </div>
+  </div>
+
+  <!-- DIENSTEN -->
+  <section id="diensten" class="section">
+    <p class="section-label">Onze diensten</p>
+    <h2 class="section-title">Begeleiding in elke fase</h2>
+    <p class="section-intro">Van de eerste echo tot de eerste weken thuis — wij staan naast u met professionele, warme zorg.</p>
+
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        </div>
+        <h3>Tijdens de zwangerschap</h3>
+        <p>Professionele opvolging van uw zwangerschap met persoonlijke begeleiding doorheen elke fase. Wij beantwoorden al uw vragen en zorgen voor een veilig en aangenaam traject naar de bevalling.</p>
+        <a class="card-link" href="./tijdens-de-zwangerschap.html">Meer informatie &rarr;</a>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <h3>Na de geboorte</h3>
+        <p>Thuisbezoeken vanaf de dag na het ziekenhuis. Wij begeleiden moeder en baby bij borstvoeding, controles en vroege signalen. Zodat het thuiskomen echt een thuiskomen is.</p>
+        <a class="card-link" href="./na-de-geboorte.html">Meer informatie &rarr;</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TEAM -->
+  <div id="team" class="team-bg">
+    <div class="section">
+      <p class="section-label">Ons team</p>
+      <h2 class="section-title">Maak kennis met onze vroedvrouwen</h2>
+      <p class="section-intro">Elk lid van ons team is actief in een eigen regio. Zo bent u altijd dicht bij een vertrouwd gezicht.</p>
+
+      <div class="team-grid" id="team-grid">
+
+        <!-- Leen Bosch -->
+        <div class="team-card">
+          <div class="team-photo">
+            <img
+              src="https://delevenscirkel.be/storage/collection-items/9/Leen-website-md.webp"
+              alt="Leen Bosch"
+            />
+          </div>
+          <div class="team-info">
+            <h3>Leen Bosch</h3>
+            <div class="team-city">Retie</div>
+            <div class="team-cities">Retie, Dessel, Mol, Arendonk, Kasterlee</div>
+            <a class="team-phone" href="tel:+32486128089">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.19 11a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 7.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              0486/12 80 89
+            </a>
+            <div class="team-since">Sinds 2013</div>
+          </div>
+        </div>
+
+        <!-- Martine Ooms -->
+        <div class="team-card">
+          <div class="team-photo">
+            <img
+              src="https://delevenscirkel.be/storage/collection-items/10/9416839844.jpg_MARTINE-md.webp"
+              alt="Martine Ooms"
+            />
+          </div>
+          <div class="team-info">
+            <h3>Martine Ooms</h3>
+            <div class="team-city">Herenthout</div>
+            <div class="team-cities">Herenthout, Nijlen, Grobbendonk, Herentals</div>
+            <a class="team-phone" href="tel:+32472466753">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.19 11a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 7.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              0472/46 67 53
+            </a>
+            <div class="team-since">Sinds 2009</div>
+          </div>
+        </div>
+
+        <!-- Justine Helsen -->
+        <div class="team-card">
+          <div class="team-photo">
+            <img
+              src="https://delevenscirkel.be/storage/collection-items/7/9416839826.jpg_JUSTINE-md.webp"
+              alt="Justine Helsen"
+            />
+          </div>
+          <div class="team-info">
+            <h3>Justine Helsen</h3>
+            <div class="team-city">Laakdal</div>
+            <div class="team-cities">Laakdal, Tessenderlo, Meerhout, Geel</div>
+            <a class="team-phone" href="tel:+32499083593">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.19 11a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 7.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              0499/08 35 93
+            </a>
+            <div class="team-since">Sinds 2015</div>
+          </div>
+        </div>
+
+        <!-- Karoline Laeremans -->
+        <div class="team-card">
+          <div class="team-photo">
+            <img
+              src="https://delevenscirkel.be/storage/collection-items/5/9416839830.jpg_KAROLINE-md.webp"
+              alt="Karoline Laeremans"
+            />
+          </div>
+          <div class="team-info">
+            <h3>Karoline Laeremans</h3>
+            <div class="team-city">Westerlo</div>
+            <div class="team-cities">Westerlo, Herselt, Hulshout, Zammel (Geel)</div>
+            <a class="team-phone" href="tel:+32498304137">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.19 11a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 7.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              0498/30 41 37
+            </a>
+            <div class="team-since">Sinds 2016</div>
+          </div>
+        </div>
+
+        <!-- Evelien Swinnen -->
+        <div class="team-card">
+          <div class="team-photo">
+            <img
+              src="https://delevenscirkel.be/storage/collection-items/6/9416839840.jpg_EVELIEN-md.webp"
+              alt="Evelien Swinnen"
+            />
+          </div>
+          <div class="team-info">
+            <h3>Evelien Swinnen</h3>
+            <div class="team-city">Ham</div>
+            <div class="team-cities">Ham, Tessenderlo</div>
+            <a class="team-phone" href="tel:+32479259206">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.19 11a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 7.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              0479/25 92 06
+            </a>
+            <div class="team-since">Sinds 2016</div>
+          </div>
+        </div>
+
+        <!-- Fien Bijnens -->
+        <div class="team-card">
+          <div class="team-photo">
+            <img
+              src="https://delevenscirkel.be/storage/collection-items/8/9416839804.jpg_FIEN-md.webp"
+              alt="Fien Bijnens"
+            />
+          </div>
+          <div class="team-info">
+            <h3>Fien Bijnens</h3>
+            <div class="team-city">Mol</div>
+            <div class="team-cities">Geel, Mol, Olen</div>
+            <a class="team-phone" href="tel:+32478290828">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.19 11a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 7.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              0478/29 08 28
+            </a>
+            <div class="team-since">Sinds 2023</div>
+          </div>
+        </div>
+
+        <!-- Marie Boonen -->
+        <div class="team-card">
+          <div class="team-photo">
+            <img
+              src="https://delevenscirkel.be/storage/collection-items/24/Marie-md.webp"
+              alt="Marie Boonen"
+            />
+          </div>
+          <div class="team-info">
+            <h3>Marie Boonen</h3>
+            <div class="team-city">Westerlo</div>
+            <div class="team-cities">Westerlo, Herselt, Hulshout, Geel</div>
+            <a class="team-phone" href="tel:+32471095329">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.19 11a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 7.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+              0471/09 53 29
+            </a>
+            <div class="team-since">Sinds 2025</div>
+          </div>
+        </div>
+
+      </div>
+      <button class="team-toggle" type="button" aria-expanded="false" aria-controls="team-grid">Toon alle vroedvrouwen</button>
+    </div>
+  </div>
+
+  <!-- ZORGREGIO -->
+  <section id="zorgregio" class="section">
+    <div class="region-wrap">
+      <div>
+        <p class="section-label">Zorgregio</p>
+        <h2 class="section-title">Actief in de hele regio Kempen</h2>
+        <p style="font-size:15px;color:var(--muted);margin-top:14px;margin-bottom:28px;">Wij rijden naar u toe in de volledige regio Kempen. Twijfelt u of u in ons werkgebied woont? Neem gerust contact op.</p>
+        <a class="btn-ghost" href="#contact">Controleer uw gemeente &rarr;</a>
+      </div>
+      <div class="region-map">
+        <div id="midwife-map" aria-label="Kaart met vroedvrouwen in de regio Kempen"></div>
+        <div class="map-card" id="midwife-map-card" hidden>
+          <button class="map-card-close" type="button" aria-label="Sluit kaartinformatie">&times;</button>
+          <h3>Leen Bosch</h3>
+          <p>
+            Meierend 66<br>
+            2470 Retie
+          </p>
+          <p>
+            0486/12 80 89<br>
+            <a href="mailto:leen.delevenscirkel@gmail.com">leen.delevenscirkel@gmail.com</a>
+          </p>
+          <a class="map-card-cta" href="https://delevenscirkel.be/team/leen-bosch" target="_blank" rel="noopener">Meer info <span>&rarr;</span></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TARIEVEN -->
+  <div id="tarieven" class="tarieven-bg">
+    <div class="section">
+      <p class="section-label">Tarieven</p>
+      <h2 class="section-title">Transparante prijzen</h2>
+      <p class="section-intro">Onze zorg is erkend door de mutualiteiten. Een groot deel van onze diensten worden terugbetaald. Neem contact op voor een persoonlijk overzicht.</p>
+      <a class="btn-primary" href="./tarieven.html">Bekijk tarieven &rarr;</a>
+    </div>
+  </div>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact-bg">
+    <div class="contact-inner">
+      <div class="contact-panel">
+        <div>
+          <p class="section-label">Contact</p>
+          <h2 class="section-title">Klaar om te starten?</h2>
+          <p class="section-intro">Bel ons, stuur een e-mail of vul het formulier in. We reageren zo snel mogelijk.</p>
+        </div>
+
+        <ul class="contact-list">
+          <li>
+            <div class="c-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.19 11a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.09 7.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+            </div>
+            <a href="tel:+32468341796">0468 34 17 96</a>
+          </li>
+          <li>
+            <div class="c-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <a href="mailto:info@delevenscirkel.be">info@delevenscirkel.be</a>
+          </li>
+          <li>
+            <div class="c-icon">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <span>Regio Kempen, Belgi&euml;</span>
+          </li>
+        </ul>
+
+        <p class="contact-note">Twijfel je of je in onze zorgregio valt? Stuur gerust je gemeente mee, dan kijken we meteen wie jou het best kan begeleiden.</p>
+      </div>
+
+      <form class="contact-form" onsubmit="return false;">
+        <div class="form-heading">
+          <h3>Stuur ons een bericht</h3>
+          <span>Antwoord volgt snel</span>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Voornaam</label>
+            <input type="text" placeholder="Jana" />
+          </div>
+          <div class="form-group">
+            <label>Achternaam</label>
+            <input type="text" placeholder="Pieters" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label>E-mailadres</label>
+          <input type="email" placeholder="jana@voorbeeld.be" />
+        </div>
+        <div class="form-group">
+          <label>Telefoon</label>
+          <input type="tel" placeholder="+32 ..." />
+        </div>
+        <div class="form-group">
+          <label>Onderwerp</label>
+          <select>
+            <option value="">Kies een onderwerp...</option>
+            <option>Begeleiding tijdens zwangerschap</option>
+            <option>Postnatale zorg thuis</option>
+            <option>Voedingsbegeleiding</option>
+            <option>Tarieven &amp; terugbetaling</option>
+            <option>Andere vraag</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Bericht</label>
+          <textarea placeholder="Schrijf hier uw vraag..."></textarea>
+        </div>
+        <button class="btn-submit" type="submit">Verstuur bericht &rarr;</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-bottom">
+        <span>&copy; 2026 Siebe Creative. Alle rechten voorbehouden.</span>
+        <div class="footer-links">
+          <a href="/privacy">Privacybeleid</a>
+          <a href="/cookies">Cookiebeleid</a>
+          <a href="/disclaimer">Disclaimer</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <a class="floating-social floating-facebook" href="https://www.facebook.com/delevenscirkel" target="_blank" rel="noopener" aria-label="Facebook">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+  </a>
+  <a class="floating-social floating-instagram" href="https://www.instagram.com/delevenscirkel" target="_blank" rel="noopener" aria-label="Instagram">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+  </a>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script>
+    const teamGrid = document.querySelector('#team-grid');
+    const teamToggle = document.querySelector('.team-toggle');
+
+    if (teamGrid && teamToggle) {
+      const collapseTeam = () => {
+        teamGrid.classList.remove('is-expanded');
+        teamToggle.setAttribute('aria-expanded', 'false');
+        teamToggle.textContent = 'Toon alle vroedvrouwen';
+      };
+
+      if (window.matchMedia('(max-width: 768px)').matches) {
+        collapseTeam();
+      }
+
+      teamToggle.addEventListener('click', () => {
+        const isExpanded = teamGrid.classList.toggle('is-expanded');
+        teamToggle.setAttribute('aria-expanded', String(isExpanded));
+        teamToggle.textContent = isExpanded ? 'Toon minder vroedvrouwen' : 'Toon alle vroedvrouwen';
+      });
+    }
+
+    const midwives = [
+      {
+        name: 'Leen Bosch',
+        address: ['Meierend 66', '2470 Retie'],
+        phone: '0486/12 80 89',
+        email: 'leen.delevenscirkel@gmail.com',
+        url: 'https://delevenscirkel.be/team/leen-bosch',
+        coords: [51.2570683, 5.0857360]
+      },
+      {
+        name: 'Martine Ooms',
+        address: ['Koestraat 81', '2270 Herenthout'],
+        phone: '0472/46 67 53',
+        email: 'martine.delevenscirkel@gmail.com',
+        url: 'https://delevenscirkel.be/team/martine-ooms',
+        coords: [51.1441640, 4.7586686]
+      },
+      {
+        name: 'Justine Helsen',
+        address: ['Oude Veerlebaan 9', '2430 Laakdal'],
+        phone: '0499/08 35 93',
+        email: 'justine.delevenscirkel@gmail.com',
+        url: 'https://delevenscirkel.be/team/justine-helsen',
+        coords: [51.0928189, 4.9898281]
+      },
+      {
+        name: 'Karoline Laeremans',
+        address: ['Sint-Barbarastraat 6', '2260 Westerlo'],
+        phone: '0498/30 41 37',
+        email: 'karoline.delevenscirkel@gmail.com',
+        url: 'https://delevenscirkel.be/team/karoline-laeremans',
+        coords: [51.0941459, 4.8750945]
+      },
+      {
+        name: 'Evelien Swinnen',
+        address: ['Broekstraat 4a', '3945 Ham'],
+        phone: '0479/25 92 06',
+        email: 'evelien.delevenscirkel@gmail.com',
+        url: 'https://delevenscirkel.be/team/evelien-swinnen',
+        coords: [51.1079339, 5.1526454]
+      },
+      {
+        name: 'Fien Bijnens',
+        address: ['Hessie 42a', '2400 Mol'],
+        phone: '0478/29 08 28',
+        email: 'fien.delevenscirkel@gmail.com',
+        url: 'https://delevenscirkel.be/team/fien-bijnens',
+        coords: [51.1788019, 5.0592001]
+      },
+      {
+        name: 'Marie Boonen',
+        address: ['Drie Engelenstraat 6', '2260 Westerlo'],
+        phone: '0471/09 53 29',
+        email: 'marie.delevenscirkel@gmail.com',
+        url: 'https://delevenscirkel.be/team/marie-boonen',
+        coords: [51.1107585, 4.9123477]
+      }
+    ];
+
+    const mapCard = document.querySelector('#midwife-map-card');
+
+    if (window.L && mapCard) {
+      const map = L.map('midwife-map', {
+        zoomControl: false,
+        scrollWheelZoom: false
+      });
+
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+      }).addTo(map);
+
+      L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+      const markerIcon = L.divIcon({
+        className: '',
+        html: '<div class="midwife-marker"></div>',
+        iconSize: [34, 34],
+        iconAnchor: [17, 34]
+      });
+
+      const title = mapCard.querySelector('h3');
+      const paragraphs = mapCard.querySelectorAll('p');
+      const cta = mapCard.querySelector('.map-card-cta');
+      const close = mapCard.querySelector('.map-card-close');
+      const markers = [];
+
+      function showMidwife(person, marker) {
+        markers.forEach((item) => item.getElement()?.querySelector('.midwife-marker')?.classList.remove('is-active'));
+        marker.getElement()?.querySelector('.midwife-marker')?.classList.add('is-active');
+
+        title.textContent = person.name;
+        paragraphs[0].innerHTML = `${person.address[0]}<br>${person.address[1]}`;
+        paragraphs[1].innerHTML = `${person.phone}<br><a href="mailto:${person.email}">${person.email}</a>`;
+        cta.href = person.url;
+        mapCard.hidden = false;
+      }
+
+      midwives.forEach((person) => {
+        const marker = L.marker(person.coords, { icon: markerIcon, title: person.name }).addTo(map);
+        marker.on('click', () => {
+          showMidwife(person, marker);
+          map.panTo(person.coords);
+        });
+        markers.push(marker);
+      });
+
+      const group = L.featureGroup(markers).addTo(map);
+      map.fitBounds(group.getBounds().pad(0.18));
+
+      close.addEventListener('click', () => {
+        mapCard.hidden = true;
+        markers.forEach((item) => item.getElement()?.querySelector('.midwife-marker')?.classList.remove('is-active'));
+      });
+    }
+  </script>
+
+</body>
+</html>

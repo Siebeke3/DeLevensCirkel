@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Na de geboorte | De Levenscirkel</title>
+  <meta name="description" content="Warme postnatale zorg door een vroedvrouw aan huis na de geboorte van je baby in de regio Kempen." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --rose: #b43d56;
+      --rose-dark: #8f2d42;
+      --rose-light: #faedf0;
+      --sage: #8ea596;
+      --sage-light: #edf4ef;
+      --gold: #c99f5b;
+      --dark: #191716;
+      --muted: #6d6863;
+      --bg: #fffaf6;
+      --white: #ffffff;
+      --border: #eee2dc;
+      --shadow: 0 22px 60px rgba(63, 38, 30, 0.13);
+      --max: 1160px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--dark);
+      background: var(--bg);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,250,246,0.88);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--border);
+      box-shadow: 0 10px 32px rgba(49,31,25,0.04);
+    }
+
+    .nav-inner {
+      max-width: var(--max);
+      height: 74px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .logo img { height: 43px; display: block; }
+
+    .nav-links {
+      display: flex;
+      gap: 26px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted);
+      font-size: 14px;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: var(--rose); }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--white);
+      background: var(--rose);
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 10px 24px rgba(180,61,86,0.22);
+    }
+
+    .hero {
+      position: relative;
+      min-height: calc(100vh - 74px);
+      display: grid;
+      align-items: end;
+      overflow: hidden;
+      color: var(--white);
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(90deg, rgba(25,23,22,0.82), rgba(25,23,22,0.44) 52%, rgba(25,23,22,0.08)),
+        linear-gradient(0deg, rgba(25,23,22,0.38), transparent 42%);
+      z-index: 1;
+    }
+
+    .hero img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 38%;
+      transform: scale(1.02);
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      max-width: var(--max);
+      width: 100%;
+      margin: 0 auto;
+      padding: 96px 24px 78px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      width: fit-content;
+      margin-bottom: 18px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 8px;
+      background: rgba(255,255,255,0.12);
+      backdrop-filter: blur(14px);
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .eyebrow::before {
+      content: '';
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--gold);
+      box-shadow: 0 0 0 5px rgba(201,159,91,0.18);
+    }
+
+    h1 {
+      max-width: 780px;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(42px, 7vw, 82px);
+      line-height: 0.98;
+      font-weight: 400;
+      text-shadow: 0 4px 28px rgba(0,0,0,0.22);
+    }
+
+    .hero p {
+      max-width: 600px;
+      margin: 24px 0 30px;
+      color: rgba(255,255,255,0.9);
+      font-size: clamp(17px, 1.7vw, 20px);
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 13px 22px;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform 0.2s, background 0.2s, border-color 0.2s;
+    }
+
+    .btn-primary {
+      color: var(--white);
+      background: var(--rose);
+      box-shadow: 0 18px 38px rgba(69,21,32,0.34);
+    }
+
+    .btn-primary:hover { background: var(--rose-dark); transform: translateY(-1px); }
+
+    .btn-light {
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,0.32);
+      background: rgba(255,255,255,0.1);
+      backdrop-filter: blur(14px);
+    }
+
+    .btn-light:hover { background: rgba(255,255,255,0.18); transform: translateY(-1px); }
+
+    .trust-row {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .trust-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 18px 24px;
+      display: flex;
+      justify-content: center;
+      gap: 28px;
+      flex-wrap: wrap;
+      color: var(--dark);
+      font-size: 14px;
+    }
+
+    .section {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 96px 24px;
+    }
+
+    .section-label {
+      color: var(--rose);
+      font-size: 11px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .section-title {
+      max-width: 680px;
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(30px, 4vw, 46px);
+      line-height: 1.14;
+      font-weight: 400;
+      margin-bottom: 18px;
+    }
+
+    .section-intro {
+      max-width: 660px;
+      color: var(--muted);
+      font-size: 17px;
+      margin-bottom: 44px;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      align-items: stretch;
+    }
+
+    .image-panel {
+      overflow: hidden;
+      border-radius: 8px;
+      min-height: 440px;
+      box-shadow: var(--shadow);
+    }
+
+    .image-panel img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .info-card {
+      padding: 38px;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--white);
+      box-shadow: 0 16px 42px rgba(63,38,30,0.08);
+    }
+
+    .info-card h2,
+    .step-card h3,
+    .cta-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 400;
+      line-height: 1.2;
+    }
+
+    .info-card h2 {
+      color: var(--rose);
+      font-size: 32px;
+      margin-bottom: 18px;
+    }
+
+    .info-card p { color: var(--muted); margin-bottom: 16px; }
+
+    .check-list {
+      list-style: none;
+      display: grid;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .check-list li {
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      color: var(--dark);
+    }
+
+    .check-list li::before {
+      content: '';
+      width: 9px;
+      height: 9px;
+      min-width: 9px;
+      margin-top: 10px;
+      border-radius: 50%;
+      background: var(--rose);
+      box-shadow: 0 0 0 5px var(--rose-light);
+    }
+
+    .soft-band {
+      background: var(--rose-light);
+      border-top: 1px solid rgba(180,61,86,0.16);
+      border-bottom: 1px solid rgba(180,61,86,0.16);
+    }
+
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .step-card {
+      min-height: 260px;
+      padding: 30px;
+      border: 1px solid rgba(180,61,86,0.16);
+      border-radius: 8px;
+      background: #fffdfb;
+    }
+
+    .step-number {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      margin-bottom: 22px;
+      border-radius: 8px;
+      background: var(--rose);
+      color: var(--white);
+      font-weight: 700;
+    }
+
+    .step-card h3 {
+      font-size: 23px;
+      margin-bottom: 12px;
+    }
+
+    .step-card p { color: var(--muted); font-size: 15px; }
+
+    .feeding-strip {
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 0 24px 96px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1px;
+    }
+
+    .feeding-card {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      min-height: 150px;
+      padding: 34px;
+      border-radius: 8px;
+      background: var(--rose);
+      color: var(--white);
+    }
+
+    .feeding-card img {
+      width: auto;
+      height: 82px;
+      object-fit: contain;
+    }
+
+    .feeding-card p {
+      font-size: 22px;
+      line-height: 1.25;
+      font-weight: 600;
+    }
+
+    .cta-section { padding: 0 24px 96px; }
+
+    .cta-card {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 28px;
+      padding: 44px;
+      border-radius: 8px;
+      background: var(--dark);
+      color: var(--white);
+      box-shadow: var(--shadow);
+    }
+
+    .cta-card h2 {
+      font-size: clamp(28px, 4vw, 42px);
+      margin-bottom: 10px;
+    }
+
+    .cta-card p {
+      max-width: 620px;
+      color: #c5b9b2;
+    }
+
+    footer {
+      background: #191716;
+      padding: 30px 24px;
+    }
+
+    .footer-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      color: #8d827c;
+      font-size: 12px;
+    }
+
+    .footer-links { display: flex; gap: 20px; }
+    .footer-links a { color: #8d827c; text-decoration: none; }
+    .footer-links a:hover { color: #e8b8c3; }
+
+    .floating-social {
+      position: fixed;
+      right: 22px;
+      z-index: 110;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--rose);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 12px 28px rgba(49,31,25,0.22);
+      transition: transform 0.2s, background 0.2s;
+    }
+
+    .floating-social:hover {
+      background: var(--rose-dark);
+      transform: translateY(-2px);
+    }
+
+    .floating-facebook { bottom: 76px; }
+    .floating-instagram { bottom: 24px; }
+
+    @media (max-width: 820px) {
+      .nav-inner { height: 66px; padding: 0 18px; }
+      .logo img { height: 36px; }
+      .nav-cta { padding: 8px 12px; font-size: 13px; }
+      .nav-links { display: none; }
+      .hero { min-height: calc(100svh - 66px); }
+      .hero-content { padding: 70px 20px 46px; }
+      .hero p { font-size: 16px; line-height: 1.62; margin: 20px 0 24px; }
+      .hero-actions { flex-direction: column; align-items: stretch; }
+      .split,
+      .steps,
+      .feeding-strip,
+      .cta-card { grid-template-columns: 1fr; }
+      .image-panel { min-height: 300px; }
+      .section { padding: 72px 20px; }
+      .info-card,
+      .step-card,
+      .cta-card { padding: 26px; }
+      .feeding-strip { padding: 0 20px 72px; }
+      .feeding-card { padding: 26px; }
+      .footer-inner { flex-direction: column; align-items: center; text-align: center; }
+    }
+
+    @media (max-width: 480px) {
+      .nav-cta { padding: 8px 10px; }
+      h1 { font-size: 40px; }
+      .hero { min-height: 620px; }
+      .trust-inner { justify-content: flex-start; }
+      .footer-links { flex-wrap: wrap; justify-content: center; gap: 12px; }
+      .floating-social { right: 14px; width: 38px; height: 38px; }
+      .floating-facebook { bottom: 66px; }
+      .floating-instagram { bottom: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-inner">
+      <a class="logo" href="./index.html">
+        <img src="https://delevenscirkel.be/themes/shop/default/build/assets/logo-0cc61c40.png" alt="De Levenscirkel" />
+      </a>
+      <ul class="nav-links">
+        <li><a href="./tijdens-de-zwangerschap.html">Tijdens de zwangerschap</a></li>
+        <li><a class="active" href="./na-de-geboorte.html">Na de geboorte</a></li>
+        <li><a href="./tarieven.html">Tarieven</a></li>
+        <li><a href="./index.html#team">Team</a></li>
+        <li><a href="./index.html#zorgregio">Zorgregio</a></li>
+        <li><a href="./index.html#contact">Contact</a></li>
+      </ul>
+      <a class="nav-cta" href="tel:+32468341796">0468 34 17 96</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <img src="https://delevenscirkel.be/storage/page/3/DL_Huisbezoek-Fien_Justine_Leen-47-xl.webp" alt="Vroedvrouw aan huis na de geboorte" />
+    <div class="hero-content">
+      <h1>Wij zijn er voor jou, je baby en je gezin.</h1>
+      <p>De eerste dagen thuis kunnen spannend zijn. Wij staan snel naast jullie met medische opvolging, voedingsbegeleiding en praktische steun.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="./index.html#contact">Vraag postnatale zorg aan &rarr;</a>
+        <a class="btn btn-light" href="tel:+32468341796">Bel 0468 34 17 96</a>
+      </div>
+    </div>
+  </header>
+
+  <div class="trust-row">
+    <div class="trust-inner">
+      <span>Bezoek vanaf thuiskomst</span>
+      <span>Ondersteuning bij borst- en flesvoeding</span>
+      <span>Zorg voor mama en baby</span>
+    </div>
+  </div>
+
+  <main>
+    <section class="section">
+      <p class="section-label">Postnatale zorg</p>
+      <h2 class="section-title">Een zachte landing thuis na de geboorte.</h2>
+      <p class="section-intro">Na de bevalling verandert alles tegelijk. We helpen jullie om vertrouwen te vinden in het voeden, verzorgen en leren kennen van jullie baby.</p>
+
+      <div class="split">
+        <div class="image-panel">
+          <img src="https://delevenscirkel.be/storage/page/3/DL_Huisbezoek-Fien_Justine_Leen-97-xl.webp" alt="Postnataal huisbezoek door vroedvrouw" />
+        </div>
+        <article class="info-card">
+          <h2>Iedereen heeft recht op een vroedvrouw aan huis.</h2>
+          <p>De eerste vijf dagen na je bevalling kunnen we dagelijks langskomen. Daarna plannen we verdere bezoeken op maat, tot maximum een jaar na de geboorte.</p>
+          <p>Als het medisch noodzakelijk is, zijn extra huisbezoeken op doktersvoorschrift mogelijk.</p>
+          <ul class="check-list">
+            <li>Medische opvolging van mama en baby.</li>
+            <li>Hulp bij borstvoeding of flesvoeding.</li>
+            <li>Antwoorden op kleine en grote vragen.</li>
+            <li>Ondersteuning voor het hele gezin.</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section class="soft-band">
+      <div class="section">
+        <p class="section-label">Wat mag je verwachten?</p>
+        <h2 class="section-title">Zorg die verder kijkt dan controles alleen.</h2>
+        <p class="section-intro">We volgen de gezondheid van moeder en kind op, maar zijn ook een rustig aanspreekpunt voor onzekerheden, voeding, herstel en emotioneel welzijn.</p>
+
+        <div class="steps">
+          <article class="step-card">
+            <span class="step-number">1</span>
+            <h3>Herstel van mama</h3>
+            <p>We controleren onder meer bloeddruk, baarmoeder, eventuele hechtingen en hoe jij je lichamelijk en mentaal voelt.</p>
+          </article>
+          <article class="step-card">
+            <span class="step-number">2</span>
+            <h3>Opvolging van baby</h3>
+            <p>We kijken naar gewicht, kleur, gedrag, voeding en signalen zoals krampjes, reflux of allergie.</p>
+          </article>
+          <article class="step-card">
+            <span class="step-number">3</span>
+            <h3>Voeding met vertrouwen</h3>
+            <p>Je krijgt begeleiding bij borstvoeding en onafhankelijk, praktisch advies bij flesvoeding.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="split">
+        <article class="info-card">
+          <h2>Vanaf de eerste dag thuis.</h2>
+          <p>We zijn er tijdens de week en in het weekend. Zeker in die eerste dagen kan een vertrouwd gezicht thuis een groot verschil maken.</p>
+          <p>Onze zorg wordt afgestemd op wat jullie nodig hebben: soms medisch, soms praktisch, soms gewoon even luisteren.</p>
+          <ul class="check-list">
+            <li>Ondersteuning bij dagelijkse babyverzorging.</li>
+            <li>Advies rond slapen, huilen, krampjes en reflux.</li>
+            <li>Ruimte voor vragen van partner en gezin.</li>
+          </ul>
+        </article>
+        <div class="image-panel">
+          <img src="https://delevenscirkel.be/storage/page/3/DL_Huisbezoek-Fien,Justine,Leen-109_websize-xl.webp" alt="Vroedvrouw begeleidt gezin na de geboorte" />
+        </div>
+      </div>
+    </section>
+
+    <div class="feeding-strip">
+      <div class="feeding-card">
+        <img src="https://delevenscirkel.be/storage/page/3/newborn-xl.webp" alt="" />
+        <p>Borstvoedingsvriendelijk advies</p>
+      </div>
+      <div class="feeding-card">
+        <img src="https://delevenscirkel.be/storage/page/3/bottle-xl.webp" alt="" />
+        <p>Onafhankelijk advies bij flesvoeding</p>
+      </div>
+    </div>
+
+    <section class="cta-section">
+      <div class="cta-card">
+        <div>
+          <h2>Net bevallen of bijna thuis?</h2>
+          <p>Neem gerust contact op. We bekijken wie jou in jouw regio snel kan begeleiden.</p>
+        </div>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="tel:+32468341796">0468 34 17 96</a>
+          <a class="btn btn-light" href="mailto:info@delevenscirkel.be">Mail ons</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>&copy; 2026 De Levenscirkel. Alle rechten voorbehouden.</span>
+      <div class="footer-links">
+        <a href="/privacy">Privacybeleid</a>
+        <a href="/cookies">Cookiebeleid</a>
+        <a href="/disclaimer">Disclaimer</a>
+      </div>
+    </div>
+  </footer>
+
+  <a class="floating-social floating-facebook" href="https://www.facebook.com/delevenscirkel" target="_blank" rel="noopener" aria-label="Facebook">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+  </a>
+  <a class="floating-social floating-instagram" href="https://www.instagram.com/delevenscirkel" target="_blank" rel="noopener" aria-label="Instagram">
+    <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+  </a>
+</body>
+</html>
